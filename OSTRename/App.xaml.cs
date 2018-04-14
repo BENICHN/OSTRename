@@ -6,7 +6,6 @@ using System.Windows;
 using Microsoft.Win32;
 using BenLib;
 using Z.Linq;
-using System.Threading;
 
 namespace OSTRename
 {

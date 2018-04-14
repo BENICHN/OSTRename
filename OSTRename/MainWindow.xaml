@@ -6,8 +6,7 @@
         xmlns:benlib="clr-namespace:BenLib.WPF;assembly=BenLib.WPF"
         xmlns:local="clr-namespace:OSTRename"
         mc:Ignorable="d"
-        Width="657" ResizeMode="CanMinimize" SizeToContent="Height"
-        AllowDrop="True" Drop="Window_Drop">
+        Width="657" ResizeMode="CanMinimize" SizeToContent="Height" AllowDrop="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -15,16 +14,16 @@
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" VerticalAlignment="Center" Margin="5">
-            <Button Name="btn_Add" VerticalAlignment="Center" HorizontalAlignment="Left" Height="40" Width="175" Click="btn_Add_Click">
+            <Button Name="btn_Add" VerticalAlignment="Center" HorizontalAlignment="Left" Height="40" Width="175" Click="btn_Add_Click" ToolTip="Ajouter des fichiers (Inser)">
                 <StackPanel Orientation="Horizontal">
-                    <ContentControl Content="{DynamicResource Add}"/>
+                    <ContentControl Content="{DynamicResource Add}" Focusable="False"/>
                     <Label Margin="5,0,0,0" Content="Ajouter des fichiers"/>
                 </StackPanel>
             </Button>
             <CheckBox Name="chbx_DisplayFilesInList" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Mettre à jour la liste après ajout de fichiers" IsChecked="True"/>
-            <Button Name="btn_Rename" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Height="40" Width="150" Click="btn_Rename_Click">
+            <Button Name="btn_Rename" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Height="40" Width="150" Click="btn_Rename_Click" ToolTip="Renommer (F5)">
                 <StackPanel Orientation="Horizontal">
-                    <ContentControl Content="{DynamicResource Checkicon}"/>
+                    <ContentControl Content="{DynamicResource Checkicon}" Focusable="False"/>
                     <Label Margin="5,0,0,0" Content="Renommer"/>
                 </StackPanel>
             </Button>

@@ -3,21 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
 using Z.Linq;
-using AsyncIO.FileSystem;
-using AsyncIO.FileSystem.Extensions;
 using BenLib;
 
 namespace OSTRename
@@ -46,9 +37,7 @@ namespace OSTRename
             }
         }
 
-        private async void btn_Add_Click(object sender, RoutedEventArgs e) => await AddFiles();
-
-        private async void btn_Rename_Click(object sender, RoutedEventArgs e)
+        public async Task RenameFiles()
         {
             if (Files.Count == 0) return;
 
@@ -66,40 +55,51 @@ namespace OSTRename
 
             foreach (string file in Files.ToList())
             {
-                var name = Path.GetFileNameWithoutExtension(file);
-                var translation = await App.Translations.FirstOrDefaultAsync(tr =>
+                try
                 {
-                    if (tr[from] == name) return true;
-                    if (App.Number)
+                    var name = Path.GetFileNameWithoutExtension(file);
+                    var translation = await App.Translations.FirstOrDefaultAsync(tr =>
                     {
-                        var numLit = name.Split(new[] { " - " }, 2, StringSplitOptions.None);
-                        if (numLit.Length < 2) return false;
-                        return numLit[0] == tr[0] && numLit[1] == tr[from];
-                    }
-                    else return false;
-                });
+                        if (tr[from] == name) return true;
+                        if (App.Number && name.StartsWith(tr[0]))
+                        {
+                            var num = name.Substring(0, tr[0].Length);
+                            var lit = name.Substring(tr[0].Length);
+                            return lit == $" - {tr[from]}";
+                        }
+                        else return false;
+                    });
 
-                bar_Main.Value++;
-                if (translation.IsNullOrEmpty()) continue;
+                    bar_Main.Value++;
+                    if (translation.IsNullOrEmpty()) continue;
 
-                var number = chbx_Num.IsChecked == true ? $"{translation[0]} - " : String.Empty;
-                var newName = Path.Combine(Path.GetDirectoryName(file), number + translation[to] + Path.GetExtension(file));
-                Files[Files.IndexOf(file)] = newName;
+                    var number = chbx_Num.IsChecked == true ? $"{translation[0]} - " : String.Empty;
+                    var newName = Path.Combine(Path.GetDirectoryName(file), number + translation[to] + Path.GetExtension(file));
+                    Files[Files.IndexOf(file)] = newName;
 
-                await AsyncFile.MoveAsync(file, newName);
-                count++;
+                    File.Move(file, newName);
+                    count++;
+                }
+                catch { }
             }
 
             MessageBox.Show($"{count} Fichiers renommés", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             bar_Main.Value = 0;
         }
 
-        protected override async void OnPreviewKeyDown(KeyEventArgs e)
+        private async void btn_Add_Click(object sender, RoutedEventArgs e) => await AddFiles();
+
+        private async void btn_Rename_Click(object sender, RoutedEventArgs e) => await RenameFiles();
+
+        protected async override void OnPreviewKeyDown(KeyEventArgs e)
         {
             switch(e.Key)
             {
                 case Key.Insert:
                     await AddFiles();
+                    break;
+                case Key.F5:
+                    await RenameFiles();
                     break;
                 case Key.Delete:
                     foreach (string file in await fileList.SelectedItems.OfTypeAsync<string>().ToList()) Files.Remove(file);
@@ -107,7 +107,7 @@ namespace OSTRename
             }
         }
 
-        private async void Window_Drop(object sender, DragEventArgs e)
+        protected async override void OnDrop(DragEventArgs e)
         {
             var files = ((string[])e.Data.GetData(DataFormats.FileDrop, false)).ToList();
             foreach (string folder in files.Where(folder => Directory.Exists(folder)).ToList())

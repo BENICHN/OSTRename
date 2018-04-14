@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSTRename", "OSTRename\OSTRename.csproj", "{FB7CF3B9-63CB-48FD-A2E7-110BEDE56D7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB7CF3B9-63CB-48FD-A2E7-110BEDE56D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB7CF3B9-63CB-48FD-A2E7-110BEDE56D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB7CF3B9-63CB-48FD-A2E7-110BEDE56D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB7CF3B9-63CB-48FD-A2E7-110BEDE56D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A0A62CD-4DA9-440A-81DE-68ED42A5A722}
+	EndGlobalSection
+EndGlobal

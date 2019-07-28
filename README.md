@@ -1,6 +1,8 @@
 # OSTRename
 A little tool to rename and number files of an OST
 
+![Main interface](https://raw.githubusercontent.com/BenNatNB/OSTRename/master/Screenshot.png)
+
 ## Layout of a translation file
 ### Header
 The header is made of 4 lines:

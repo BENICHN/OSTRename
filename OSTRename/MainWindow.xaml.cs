@@ -1,15 +1,14 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using BenLib.Standard;
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.IO;
 using Z.Linq;
-using BenLib;
 
 namespace OSTRename
 {
@@ -41,8 +40,8 @@ namespace OSTRename
         {
             if (Files.Count == 0) return;
 
-            var from = App.Pattern.IndexOf(cbx_From.SelectedItem);
-            var to = App.Pattern.IndexOf(cbx_To.SelectedItem);
+            int from = App.Pattern.IndexOf(cbx_From.SelectedItem);
+            int to = App.Pattern.IndexOf(cbx_To.SelectedItem);
 
             if (App.Number)
             {
@@ -57,14 +56,14 @@ namespace OSTRename
             {
                 try
                 {
-                    var name = Path.GetFileNameWithoutExtension(file);
-                    var translation = await App.Translations.FirstOrDefaultAsync(tr =>
+                    string name = Path.GetFileNameWithoutExtension(file);
+                    string[] translation = await App.Translations.FirstOrDefaultAsync(tr =>
                     {
                         if (tr[from] == name) return true;
                         if (App.Number && name.StartsWith(tr[0]))
                         {
-                            var num = name.Substring(0, tr[0].Length);
-                            var lit = name.Substring(tr[0].Length);
+                            string num = name.Substring(0, tr[0].Length);
+                            string lit = name.Substring(tr[0].Length);
                             return lit == $" - {tr[from]}";
                         }
                         else return false;
@@ -73,8 +72,8 @@ namespace OSTRename
                     bar_Main.Value++;
                     if (translation.IsNullOrEmpty()) continue;
 
-                    var number = chbx_Num.IsChecked == true ? $"{translation[0]} - " : String.Empty;
-                    var newName = Path.Combine(Path.GetDirectoryName(file), number + translation[to] + Path.GetExtension(file));
+                    string number = chbx_Num.IsChecked == true ? $"{translation[0]} - " : string.Empty;
+                    string newName = Path.Combine(Path.GetDirectoryName(file), number + translation[to] + Path.GetExtension(file));
                     Files[Files.IndexOf(file)] = newName;
 
                     File.Move(file, newName);
@@ -91,9 +90,9 @@ namespace OSTRename
 
         private async void btn_Rename_Click(object sender, RoutedEventArgs e) => await RenameFiles();
 
-        protected async override void OnPreviewKeyDown(KeyEventArgs e)
+        protected override async void OnPreviewKeyDown(KeyEventArgs e)
         {
-            switch(e.Key)
+            switch (e.Key)
             {
                 case Key.Insert:
                     await AddFiles();
@@ -107,7 +106,7 @@ namespace OSTRename
             }
         }
 
-        protected async override void OnDrop(DragEventArgs e)
+        protected override async void OnDrop(DragEventArgs e)
         {
             var files = ((string[])e.Data.GetData(DataFormats.FileDrop, false)).ToList();
             foreach (string folder in files.Where(folder => Directory.Exists(folder)).ToList())

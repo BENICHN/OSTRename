@@ -1,10 +1,10 @@
 ﻿using AsyncIO.FileSystem;
+using BenLib.Standard;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Microsoft.Win32;
-using BenLib;
 using Z.Linq;
 
 namespace OSTRename
@@ -14,7 +14,7 @@ namespace OSTRename
     /// </summary>
     public partial class App : Application
     {
-        public new static MainWindow MainWindow { get; private set; }
+        public static new MainWindow MainWindow { get; private set; }
 
         public static string OSTName { get; private set; }
         public static string[] Pattern { get; private set; }
@@ -63,9 +63,9 @@ namespace OSTRename
                 {
                     if (Number)
                     {
-                        var index = line.IndexOf(" ⇒ ");
-                        var number = line.Substring(0, index);
-                        var litt = line.Substring(index + 3);
+                        int index = line.IndexOf(" ⇒ ");
+                        string number = line.Substring(0, index);
+                        string litt = line.Substring(index + 3);
                         return new[] { number }.Concat(litt.Split(new[] { " ⇔ " }, StringSplitOptions.None)).ToArray();
                     }
                     else return line.Split(new[] { " ⇔ " }, StringSplitOptions.None);
